@@ -1,10 +1,207 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Checkout canceled</title></head>
-<body style="font-family:system-ui,Arial,sans-serif;max-width:720px;margin:40px auto;line-height:1.55">
-<h1>Checkout canceled</h1>
-<p>No worries—take a closer look at the value and screenshots before buying.</p>
-<p>Read the article: <a target="_blank" href="https://medium.com/p/2d8be668aa72/edit">Medium overview</a></p>
-<p>Ready to try again? <a href="https://www.paypal.com/ncp/payment/JGUJ36TRU2JJU">Pay with PayPal</a></p>
-</body></html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Checkout canceled — Multicloud Surveillance Platform</title>
+  <meta name="description" content="Your PayPal checkout was canceled. Review the value and screenshots, try again, or use the QR fallback. Support available.">
+  <link rel="canonical" href="https://<your-gh-pages-domain>/cancel.html"/>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Checkout canceled — Multicloud Surveillance Platform">
+  <meta property="og:description" content="Review value/screenshots, retry checkout, or pay via QR.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <style>
+    :root{
+      /* mismos tokens que index.html */
+      --bg: #0b0c10;
+      --card: #111318;
+      --text: #e8ebf1;
+      --muted: #aeb6c2;
+      --brand: #21c08b;
+      --brand-600:#19a574;
+      --danger: #ff4d4f;
+      --focus: #8aa8ff;
+      --ring: 0 0 0 3px;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --maxw: 920px;
+      --padx: clamp(16px, 3vw, 24px);
+      --space-2:.75rem; --space-3:1rem; --space-4:1.5rem; --space-5:2rem; --space-6:3rem;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height:1.6;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 10% -10%, #111318 0%, #0b0c10 60%, #0b0c10 100%);
+    }
+    a{color:var(--brand); text-decoration: none;}
+    a:hover{text-decoration: underline;}
+    header, footer{border-bottom:1px solid rgba(255,255,255,.08)}
+    footer{border-top:1px solid rgba(255,255,255,.08); border-bottom:none}
+
+    .wrap{max-width:var(--maxw); margin:0 auto; padding: clamp(16px, 2.2vw, 24px) var(--padx);}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(16px, 2vw, 24px);
+    }
+    h1{font-size: clamp(1.6rem, 3.2vw, 2.2rem); line-height:1.2; margin:.2rem 0 .5rem}
+    .lead{color:var(--muted); max-width:75ch}
+
+    .grid{display:grid; gap:var(--space-5)}
+    @media (min-width: 760px){ .grid{grid-template-columns: 1.4fr .9fr;} }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:.8rem 1rem; border-radius:12px; border:none; cursor:pointer;
+      background: var(--brand); color:#041c13; font-weight:700;
+      transition: transform .06s ease, background .2s ease;
+    }
+    .btn:hover{background:var(--brand-600)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{
+      background: transparent; color: var(--text);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .btn.secondary:hover{background: rgba(255,255,255,.05);}
+
+    .list{margin:0; padding-left:1.2rem}
+    .muted{color:var(--muted)}
+    figure{margin:0}
+    .qr img{
+      border-radius:12px; border:1px solid rgba(255,255,255,.12);
+      background:#0f1116;
+    }
+    .status{padding:.75rem .9rem; border-radius:12px; background:#161923; border:1px solid rgba(255,255,255,.12); color:var(--muted)}
+    .error{color:var(--danger)}
+
+    .foot{
+      display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      color:var(--muted); font-size:.95rem;
+    }
+
+    @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+  </style>
+</head>
+<body>
+  <header role="banner">
+    <div class="wrap">
+      <h1>Checkout canceled</h1>
+      <p class="lead">No worries — review value & screenshots, retry the checkout, or use the QR fallback. If you need help, we’re one email away.</p>
+    </div>
+  </header>
+
+  <main class="wrap" role="main">
+    <div class="grid">
+      <!-- Left: Actions + reasons -->
+      <section class="card" aria-labelledby="actions-title">
+        <h2 id="actions-title" style="margin-top:0">Next steps</h2>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap; margin:.5rem 0 var(--space-4)">
+          <!-- Retentar: vuelve al checkout (puedes añadir ?retry=1 si lo manejas en index.js) -->
+          <a class="btn" href="./index.html">Try again — PayPal Checkout</a>
+          <a class="btn secondary" href="https://www.paypal.com/ncp/payment/JGUJ36TRU2JJU" target="_blank" rel="noopener noreferrer">Pay with QR (fallback)</a>
+        </div>
+
+        <h3>Why cancellations happen</h3>
+        <ul class="list">
+          <li>Browser extensions (ad blockers, privacy, script blockers) blocking the PayPal SDK.</li>
+          <li>Invalid or missing card/account settings; currency not supported by your funding source.</li>
+          <li>Network hiccups or an expired session tab.</li>
+        </ul>
+
+        <h3>Quick fixes</h3>
+        <ul class="list">
+          <li>Open a fresh tab or try an **incognito window**.</li>
+          <li>Temporarily disable blockers; reload and retry.</li>
+          <li>Ensure your **GitHub username** is ready — you’ll get a collaborator invite after payment.</li>
+        </ul>
+
+        <p class="muted">Reading first? Explore the article overview (value, diagrams, and trade-offs):<br>
+          <a href="https://medium.com/@falvarezpinto/transparency-this-article-includes-links-to-a-public-demo-and-to-my-own-private-repository-2d8be668aa72?source=friends_link&sk=b41620292139fdd2d2df133ac33aa380"
+             target="_blank" rel="noopener noreferrer">Medium overview</a>.
+        </p>
+      </section>
+
+      <!-- Right: Support + alt path -->
+      <aside class="card" aria-labelledby="support-title">
+        <h2 id="support-title" style="margin-top:0">Need help?</h2>
+        <p>If you faced an error during checkout, send us a note and (if available) include the **Order ID** shown below.</p>
+
+        <div class="status" id="orderbox" hidden>
+          <strong>Order ID:</strong> <span id="orderId"></span>
+          <button id="copyBtn" class="btn secondary" style="margin-left:.5rem">Copy</button>
+        </div>
+
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap; margin-top:var(--space-3)">
+          <a id="mailtoLink" class="btn secondary" href="mailto:falvarezpinto@gmail.com">Email support</a>
+          <a class="btn secondary" href="./index.html">Back to product page</a>
+        </div>
+
+        <h3 style="margin-top:var(--space-4)">Security & privacy</h3>
+        <p class="muted">We only collect what’s needed to provision access (email + GitHub handle). No shipping. Payments are processed by PayPal.</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="wrap foot">
+      <p>© <span id="year"></span> Multicloud Platform — All rights reserved.</p>
+      <p><a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a> · <a href="mailto:falvarezpinto@gmail.com">Support</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // util
+    const $ = (s, el=document) => el.querySelector(s);
+    $('#year').textContent = new Date().getFullYear();
+
+    // Lee ?orderId= y ?reason= si fueran pasados por el flujo
+    const params = new URLSearchParams(location.search);
+    const orderId = params.get('orderId') || '';
+    const reason  = params.get('reason')  || '';
+
+    // Muestra un mensaje contextual
+    const statusEl = $('#status');
+    if (reason){
+      statusEl.textContent = 'Reason: ' + reason;
+    } else {
+      statusEl.textContent = 'Payment not completed. You can retry checkout or use the QR fallback.';
+    }
+
+    // Si hay orderId, muéstralo y arma mailto con asunto/cuerpo
+    if (orderId){
+      $('#orderId').textContent = orderId;
+      $('#orderbox').hidden = false;
+
+      const subject = encodeURIComponent('Support — PayPal checkout canceled (Order ' + orderId + ')');
+      const body = encodeURIComponent(
+        'Hi,\n\nCheckout was canceled.\n\nOrder ID: ' + orderId +
+        '\nBrowser: ' + navigator.userAgent +
+        '\nTime: ' + new Date().toISOString() +
+        '\n\nDetails:\n- What happened just before the cancel?\n- Country/currency?\n- Any extensions enabled?\n'
+      );
+      $('#mailtoLink').href = 'mailto:falvarezpinto@gmail.com?subject=' + subject + '&body=' + body;
+
+      $('#copyBtn').addEventListener('click', () => {
+        navigator.clipboard.writeText(orderId).then(() => {
+          $('#copyBtn').textContent = 'Copied';
+          setTimeout(()=> $('#copyBtn').textContent = 'Copy', 1800);
+        }).catch(()=>{});
+      });
+    }
+  </script>
+</body>
+</html>

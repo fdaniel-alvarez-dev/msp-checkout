@@ -1,31 +1,236 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Private Access — Multicloud Surveillance Platform</title>
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_LIVE_CLIENT_ID&currency=USD"></script>
-<style>body{font-family:system-ui,Arial,sans-serif;max-width:860px;margin:40px auto;line-height:1.55}#paypal-button-container{margin-top:16px}</style>
-</head><body>
-<h1>Private Access — Multicloud Surveillance Platform</h1>
-<p>Production-grade IaC (Terraform/Kubernetes), CI/CD pipelines, security baselines, and architecture docs. Private GitHub invite within <b>24h</b> (often 1–2h). Purchase = EULA accepted.</p>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-<div id="paypal-button-container"></div>
-<script>
-paypal.Buttons({
-  createOrder: (data, actions) => actions.order.create({
-    purchase_units: [{ amount: { value: '59.00' },
-      description: 'Private access to Multicloud Surveillance Platform repository' }]
-  }),
-  onApprove: (data, actions) => actions.order.capture().then(() => {
-    window.location.href = './success.html';
-  }),
-  onCancel: () => { window.location.href = './cancel.html'; },
-  onError:  () => { window.location.href = './cancel.html'; }
-}).render('#paypal-button-container');
-</script>
+  <title>Payment successful — Multicloud Surveillance Platform</title>
+  <meta name="description" content="Payment completed. Accept your GitHub invite to access the private repository. Instructions and support inside.">
+  <link rel="canonical" href="https://<your-gh-pages-domain>/success.html"/>
 
-<h3>Pay by QR</h3>
-<a href="https://www.paypal.com/ncp/payment/JGUJ36TRU2JJU" target="_blank" rel="noopener">
-  <img src="./paypal-qr.png" alt="Pay with PayPal QR" width="220" height="220"/>
-</a>
-<p style="font-size:0.9em">Scan to purchase — private repo invite within 24h (often 1–2h).</p>
-  
-</body></html>
+  <!-- Open Graph -->
+  <meta property="og:title" content="Payment successful — Multicloud Surveillance Platform">
+  <meta property="og:description" content="Accept your GitHub invite and access the private repository.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <style>
+    :root{
+      /* mismos tokens que index.html/cancel.html */
+      --bg: #0b0c10;
+      --card: #111318;
+      --text: #e8ebf1;
+      --muted: #aeb6c2;
+      --brand: #21c08b;
+      --brand-600:#19a574;
+      --danger: #ff4d4f;
+      --focus: #8aa8ff;
+      --ring: 0 0 0 3px;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --maxw: 920px;
+      --padx: clamp(16px, 3vw, 24px);
+      --space-2:.75rem; --space-3:1rem; --space-4:1.5rem; --space-5:2rem; --space-6:3rem;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height:1.6;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 10% -10%, #111318 0%, #0b0c10 60%, #0b0c10 100%);
+    }
+    a{color:var(--brand); text-decoration: none;}
+    a:hover{text-decoration: underline;}
+    .skip-link{
+      position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      position:fixed; left:var(--padx); top:var(--padx); width:auto; height:auto; padding:.5rem .75rem;
+      background:#111318; color:var(--text); border-radius:8px; outline:var(--ring) var(--focus);
+      z-index:9999;
+    }
+    header, footer{border-bottom:1px solid rgba(255,255,255,.08)}
+    footer{border-top:1px solid rgba(255,255,255,.08); border-bottom:none}
+
+    .wrap{max-width:var(--maxw); margin:0 auto; padding: clamp(16px, 2.2vw, 24px) var(--padx);}
+    .hero{display:grid; gap:var(--space-3)}
+    h1{font-size: clamp(1.7rem, 3.2vw, 2.3rem); line-height:1.2; margin:.2rem 0 .5rem}
+    .lead{color:var(--muted); max-width:75ch}
+
+    .grid{display:grid; gap:var(--space-5)}
+    @media (min-width: 760px){ .grid{grid-template-columns: 1.4fr .9fr;} }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(16px, 2vw, 24px);
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:.8rem 1rem; border-radius:12px; border:none; cursor:pointer;
+      background: var(--brand); color:#041c13; font-weight:700;
+      transition: transform .06s ease, background .2s ease;
+    }
+    .btn:hover{background:var(--brand-600)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{
+      background: transparent; color: var(--text);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .btn.secondary:hover{background: rgba(255,255,255,.05);}
+
+    .status{padding:.75rem .9rem; border-radius:12px; background:#161923; border:1px solid rgba(255,255,255,.12); color:var(--muted)}
+    .error{color:var(--danger)}
+    .list{margin:0; padding-left:1.2rem}
+    label{font-weight:600;}
+    input[type="text"]{
+      width:100%;
+      padding:.75rem .9rem;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.2);
+      background:#0f1116; color:var(--text); outline:none;
+    }
+    input[type="text"]::placeholder{color:#8892a6;}
+    input[type="text"]:focus-visible{
+      box-shadow: var(--ring) var(--focus);
+      border-color: transparent;
+    }
+
+    @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header role="banner">
+    <div class="wrap hero">
+      <h1>Payment successful</h1>
+      <p class="lead">Thank you! Next, accept your GitHub invite to access the private repository. If you paid via QR or typed a wrong GitHub handle, you can confirm it below.</p>
+    </div>
+  </header>
+
+  <main id="main" class="wrap" role="main">
+    <div class="grid">
+      <!-- Left: What to do now -->
+      <section class="card" aria-labelledby="next-title">
+        <h2 id="next-title" style="margin-top:0">Next steps</h2>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <ol class="list" style="margin-top:.5rem">
+          <li>Open your email and accept the **GitHub invitation** (subject: “You’ve been invited…”).</li>
+          <li>Or go to <a href="https://github.com/notifications" target="_blank" rel="noopener noreferrer">GitHub Notifications</a> and accept it there.</li>
+          <li>Once accepted, you can open the repo: <a id="repoLink" href="https://github.com/fdaniel-alvarez-dev/multicloud-surveillance-platform" target="_blank" rel="noopener noreferrer">Private repository</a>.</li>
+        </ol>
+
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap; margin:.8rem 0 var(--space-4)">
+          <a class="btn" href="https://github.com/notifications" target="_blank" rel="noopener noreferrer">Open GitHub Notifications</a>
+          <a class="btn secondary" id="repoBtn" href="https://github.com/fdaniel-alvarez-dev/multicloud-surveillance-platform" target="_blank" rel="noopener noreferrer">Open repo (after accepting)</a>
+        </div>
+
+        <h3>Order details</h3>
+        <div class="status" id="orderbox" hidden>
+          <strong>Order ID:</strong> <span id="orderId"></span>
+          <button id="copyBtn" class="btn secondary" style="margin-left:.5rem">Copy</button>
+        </div>
+
+        <p class="status" style="margin-top:.75rem">Provisioning window: <strong>within 24h</strong> (often 1–2h). If you don’t see the invite in 2 hours, contact support with your Order ID.</p>
+      </section>
+
+      <!-- Right: Confirm GitHub username / Support -->
+      <aside class="card" aria-labelledby="support-title">
+        <h2 id="support-title" style="margin-top:0">Confirm your GitHub username (optional)</h2>
+        <p class="lead" style="font-size:1rem">If you paid via **QR** or suspect a typo, confirm your handle so we can match your purchase faster.</p>
+
+        <label for="gh">GitHub Username</label>
+        <input id="gh" type="text" placeholder="your-github-handle"
+               pattern="^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$"
+               aria-describedby="gh-hint">
+        <div id="gh-hint" class="status" style="margin-top:.5rem">Allowed: letters/numbers, hyphens (no leading/trailing hyphen, max 39 chars).</div>
+
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap; margin-top:var(--space-3)">
+          <a id="mailtoLink" class="btn secondary" href="mailto:falvarezpinto@gmail.com">Email support</a>
+          <a class="btn secondary" href="./index.html">Back to product page</a>
+        </div>
+
+        <h3 style="margin-top:var(--space-4)">What you’ll receive</h3>
+        <ul class="list">
+          <li>Private repository access (source code, docs, runbooks).</li>
+          <li>Updates within the advertised maintenance window.</li>
+          <li>Support via Issues/Discussions unless otherwise agreed.</li>
+        </ul>
+
+        <h3 style="margin-top:var(--space-4)">Security & privacy</h3>
+        <p class="status">We only store what’s needed to provision access (email + GitHub handle). Payments are processed by PayPal.</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="wrap" style="display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content:space-between; color:var(--muted); font-size:.95rem">
+      <p>© <span id="year"></span> Multicloud Platform — All rights reserved.</p>
+      <p><a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a> · <a href="mailto:falvarezpinto@gmail.com">Support</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Utils
+    const $ = (s, el=document) => el.querySelector(s);
+    $('#year').textContent = new Date().getFullYear();
+
+    const params  = new URLSearchParams(location.search);
+    const orderId = params.get('orderId') || '';
+    const ghParam = params.get('gh') || ''; // por si decides pasar también el GH por query
+    const statusEl = $('#status');
+    const ghInput  = $('#gh');
+    const mailto   = $('#mailtoLink');
+
+    // Mensaje de estado inicial
+    statusEl.textContent = 'Payment completed. Check your inbox for the GitHub invitation.';
+
+    // Muestra Order ID si viene en la URL
+    if (orderId){
+      $('#orderId').textContent = orderId;
+      $('#orderbox').hidden = false;
+    }
+
+    // Pre-carga GH si viene
+    if (ghParam) ghInput.value = ghParam;
+
+    // Arma mailto con asunto/cuerpo prellenados (Order + GH)
+    function rebuildMailto(){
+      const gh = ghInput.value.trim();
+      const subject = encodeURIComponent('Access provisioning — Order ' + (orderId || '(no-id)'));
+      const body = encodeURIComponent(
+        'Hi,\n\nPayment completed. Please ensure my GitHub username is linked to this order.\n\n' +
+        'Order ID: ' + (orderId || '(none)') + '\n' +
+        'GitHub username: ' + (gh || '(not provided)') + '\n' +
+        'Browser: ' + navigator.userAgent + '\n' +
+        'Time: ' + new Date().toISOString() + '\n'
+      );
+      mailto.href = 'mailto:falvarezpinto@gmail.com?subject=' + subject + '&body=' + body;
+    }
+    rebuildMailto();
+    ghInput.addEventListener('input', rebuildMailto);
+
+    // Copiar Order ID
+    const copyBtn = $('#copyBtn');
+    if (copyBtn){
+      copyBtn.addEventListener('click', () => {
+        const txt = orderId || '';
+        if (!txt) return;
+        navigator.clipboard.writeText(txt).then(() => {
+          copyBtn.textContent = 'Copied';
+          setTimeout(()=> copyBtn.textContent = 'Copy', 1800);
+        }).catch(()=>{});
+      });
+    }
+  </script>
+</body>
+</html>

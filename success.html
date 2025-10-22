@@ -1,11 +1,31 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Payment confirmed</title></head>
-<body style="font-family:system-ui,Arial,sans-serif;max-width:720px;margin:40px auto;line-height:1.55">
-<h1>Payment confirmed ✅</h1>
-<p>You’ll receive a private GitHub invite within <strong>24h</strong> (often 1–2h). Check the email tied to your GitHub account.</p>
-<p>If you didn’t include it at checkout, email <strong>your GitHub username + company domain + cloud & region + #1 blocker</strong> to <a href="mailto:falvarezpinto@gmail.com">falvarezpinto@gmail.com</a>.</p>
-<p>Start here after accepting the invite: <code>/docs/README.md</code><br>
-By proceeding you accept the EULA.</p>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Private Access — Multicloud Surveillance Platform</title>
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_LIVE_CLIENT_ID&currency=USD"></script>
+<style>body{font-family:system-ui,Arial,sans-serif;max-width:860px;margin:40px auto;line-height:1.55}#paypal-button-container{margin-top:16px}</style>
+</head><body>
+<h1>Private Access — Multicloud Surveillance Platform</h1>
+<p>Production-grade IaC (Terraform/Kubernetes), CI/CD pipelines, security baselines, and architecture docs. Private GitHub invite within <b>24h</b> (often 1–2h). Purchase = EULA accepted.</p>
+
+<div id="paypal-button-container"></div>
+<script>
+paypal.Buttons({
+  createOrder: (data, actions) => actions.order.create({
+    purchase_units: [{ amount: { value: '59.00' },
+      description: 'Private access to Multicloud Surveillance Platform repository' }]
+  }),
+  onApprove: (data, actions) => actions.order.capture().then(() => {
+    window.location.href = './success.html';
+  }),
+  onCancel: () => { window.location.href = './cancel.html'; },
+  onError:  () => { window.location.href = './cancel.html'; }
+}).render('#paypal-button-container');
+</script>
+
+<h3>Pay by QR</h3>
+<a href="https://www.paypal.com/ncp/payment/JGUJ36TRU2JJU" target="_blank" rel="noopener">
+  <img src="./paypal-qr.png" alt="Pay with PayPal QR" width="220" height="220"/>
+</a>
+<p style="font-size:0.9em">Scan to purchase — private repo invite within 24h (often 1–2h).</p>
+  
 </body></html>

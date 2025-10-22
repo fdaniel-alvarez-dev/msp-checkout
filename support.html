@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Support — Multicloud Surveillance Platform</title>
+<meta name="description" content="Get help with checkout or repository access. Email support with your Order ID and GitHub username.">
+<link rel="canonical" href="https://fdaniel-alvarez-dev.github.io/msp-checkout/support.html"/>
+<style>
+:root{--bg:#0b0c10;--card:#111318;--text:#e8ebf1;--muted:#aeb6c2;--brand:#21c08b;--brand-600:#19a574;--focus:#8aa8ff;--ring:0 0 0 3px;--radius:14px;--shadow:0 10px 30px rgba(0,0,0,.35);--maxw:920px;--padx:clamp(16px,3vw,24px)}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:radial-gradient(1200px 800px at 10% -10%,#111318 0%,#0b0c10 60%,#0b0c10 100%);line-height:1.6}
+a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:clamp(16px,2.2vw,24px) var(--padx)}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(16px,2vw,24px)}
+h1{font-size:clamp(1.7rem,3.2vw,2.3rem);line-height:1.2;margin:.2rem 0 .5rem}
+.muted{color:var(--muted)}
+footer{border-top:1px solid rgba(255,255,255,.08);margin-top:32px}
+.foot{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;justify-content:space-between;color:var(--muted);font-size:.95rem}
+.status{padding:.75rem .9rem;border-radius:12px;background:#161923;border:1px solid rgba(255,255,255,.12);color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 1rem;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
+.btn:hover{background:rgba(255,255,255,.05)}
+</style>
+</head>
+<body>
+<header class="wrap"><h1>Support</h1><p class="muted">For fastest help, include your Order ID and GitHub username.</p></header>
+<main class="wrap">
+  <section class="card">
+    <div class="status" id="hint">If you just paid, check your inbox or <a href="https://github.com/notifications" target="_blank" rel="noopener noreferrer">GitHub Notifications</a> for the invitation.</div>
+    <h2 style="margin-top:1rem">Contact</h2>
+    <p><a id="mailto" class="btn" href="mailto:falvarezpinto@gmail.com">Email support</a></p>
+    <h3>What to include</h3>
+    <ul>
+      <li>Your <strong>Order ID</strong> (if available).</li>
+      <li>Your <strong>GitHub username</strong>.</li>
+      <li>Brief description of the issue (e.g., “paid via QR”, “typo in handle”).</li>
+    </ul>
+  </section>
+</main>
+<footer>
+  <div class="wrap foot">
+    <p>© <span id="year"></span> Multicloud Platform</p>
+    <p><a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a> · <a href="./support.html">Support</a></p>
+  </div>
+</footer>
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+const p = new URLSearchParams(location.search);
+const orderId = p.get('orderId')||'';
+const gh = p.get('gh')||'';
+const subject = encodeURIComponent('Support request — Order ' + (orderId||'(none)'));
+const body = encodeURIComponent('Hi,\n\nIssue details:\n- Order ID: '+(orderId||'(none)')+'\n- GitHub username: '+(gh||'(not provided)')+'\n- Description:\n');
+document.getElementById('mailto').href = 'mailto:falvarezpinto@gmail.com?subject='+subject+'&body='+body;
+</script>
+</body>
+</html>

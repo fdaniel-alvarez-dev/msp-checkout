@@ -196,10 +196,277 @@
   </script>
   
   <!-- Privacy-friendly analytics by Plausible -->
-  <script async src="https://plausible.io/js/pa-2PxBChTWyzU3nHFunZmXI.js"></script>
-  
+<script async src="https://plausible.io/js/pa-2PxBChTWyzU3nHFunZmXI.js"></script>
 <script>
-// Plausible custom events for MSP Checkout (fixed)
+  window.plausible = window.plausible || function(){ (window.plausible.q = window.plausible.q || []).push(arguments); };
+</script>
+<!-- /Plausible -->
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <div class="wrap hero" role="banner">
+      <h1>Private Access — Multicloud Surveillance Platform</h1>
+      <p class="lead">Production-grade IaC (Terraform/Kubernetes), CI/CD pipelines, security baselines, and architecture docs. Private GitHub invite within <strong>24h</strong> (often 1–2h). Purchase implies EULA acceptance.</p>
+    </div>
+  </header>
+
+  <main id="main" class="wrap" role="main">
+    <div class="grid" aria-describedby="purchase-desc">
+      <!-- Purchase card -->
+      <section class="card" aria-labelledby="purchase-title">
+        <h2 id="purchase-title" style="margin-top:0">Purchase Access</h2>
+        <p id="purchase-desc" class="notice">To provision access we need your GitHub username. You’ll receive a collaborator invite to the private repository.</p>
+
+        <form id="buy-form" novalidate>
+          <fieldset>
+            <legend class="sr-only">Buyer details</legend>
+
+            <label for="gh">GitHub Username</label>
+            <input
+              id="gh"
+              name="gh"
+              type="text"
+              inputmode="latin"
+              autocomplete="username"
+              placeholder="your-github-handle"
+              aria-describedby="gh-hint"
+              required
+              pattern="^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$"
+            />
+            <div id="gh-hint" class="hint">
+              Allowed: letters/numbers, hyphens (no trailing/leading hyphen, max 39 chars).
+            </div>
+
+            <div class="inline">
+              <p><a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a> · <a href="./support.html">Support</a></p>
+            </div>
+          
+            <!-- EULA / Terms consent checkbox -->
+            <div class="inline">
+              <input id="eula" class="checkbox" type="checkbox" required />
+              <label for="eula">
+                I accept the <a href="./terms.html" target="_blank" rel="noopener noreferrer">EULA/Terms</a>
+              </label>
+            </div>
+            <!-- /EULA -->
+</fieldset>
+
+          <div class="inline">
+            <button id="prep-btn" class="btn" type="button" aria-controls="paypal-slot" aria-expanded="false">
+              Continue to PayPal — US$49.99
+            </button>
+          </div>
+
+          <div id="status" class="status" role="status" aria-live="polite"></div>
+
+          <div id="paypal-slot" class="paypal-slot" aria-label="PayPal checkout area"></div>
+        </form>
+
+        <noscript>
+          <p class="error"><strong>JavaScript required.</strong> Enable JavaScript or use the QR option below.</p>
+        </noscript>
+      </section>
+
+      <!-- Alternative: QR Pay -->
+      <aside class="card" aria-labelledby="qr-title">
+        <h2 id="qr-title" style="margin-top:0">Pay by QR (Fallback)</h2>
+        <figure class="qr">
+          <a href="https://www.paypal.com/ncp/payment/JGUJ36TRU2JJU" target="_blank" rel="noopener noreferrer">
+            <img src="./paypal-qr.png" alt="Pay with PayPal QR" width="220" height="220" loading="lazy" decoding="async">
+          </a>
+          <figcaption>Scan to purchase — private repo invite within 24h (often 1–2h).</figcaption>
+        </figure>
+        <p class="notice">After paying by QR, email <a href="mailto:falvarezpinto@gmail.com">falvarezpinto@gmail.com</a> with your GitHub username to speed up provisioning.</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="wrap foot">
+      <p>© <span id="year"></span> Multicloud Platform — All rights reserved.</p>
+      <p><a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a> · <a href="mailto:falvarezpinto@gmail.com">Support</a></p>
+    </div>
+  </footer>
+
+  <!-- PayPal SDK will be lazy-loaded for performance -->
+  <script>
+    // Utility: load PayPal SDK once
+    let paypalLoaded = false;
+    function loadPayPalSDK() {
+      return new Promise((resolve, reject) => {
+        if (paypalLoaded) return resolve();
+        const script = document.createElement('script');
+        script.src = "https://www.paypal.com/sdk/js?client-id=Af1EYUBrBx5ZPzpnY026secBrtHtu6HOe9rdCn-rjN_XYyc6sRegkaMzw9-_VUb8JmHBpa21jtSm8eTl&currency=USD&intent=capture";
+        script.async = true;
+        script.onload = () => { paypalLoaded = true; resolve(); };
+        script.onerror = () => reject(new Error('Failed to load PayPal SDK'));
+        document.head.appendChild(script);
+      });
+    }
+  
+    // A11y helpers
+    const $ = (s, el=document) => el.querySelector(s);
+    const statusEl = $('#status');
+    function say(msg, isError=false){
+      statusEl.textContent = msg || '';
+      statusEl.classList.toggle('error', !!isError);
+    }
+  
+    // GitHub handle validation (HTML5 pattern + JS feedback)
+    function validHandle(h) {
+      return /^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/.test(h);
+    }
+  
+    (function init(){
+      const gh = $('#gh');
+      const eula = $('#eula');
+      const prep = $('#prep-btn');
+      const paypalSlot = $('#paypal-slot');
+  
+      // Year
+      $('#year').textContent = new Date().getFullYear();
+  
+      // Re-validate on input
+      function checkReady(){
+        const ok = validHandle(gh.value.trim()) && eula.checked;
+        prep.disabled = !ok;
+        return ok;
+      }
+      ['input','change','blur'].forEach(ev=>{
+        gh.addEventListener(ev, checkReady);
+        eula.addEventListener(ev, checkReady);
+      });
+      checkReady();
+  
+      prep.addEventListener('click', async () => {
+        if (!checkReady()) {
+          say('Please enter a valid GitHub username and accept the EULA.', true);
+          return;
+        }
+        say('Loading PayPal…');
+  
+        try{
+          await loadPayPalSDK();
+        }catch(e){
+          say('Could not load PayPal. Please retry or use QR.', true);
+          return;
+        }
+  
+        // Render PayPal Buttons (once). Disable prep button and expand region for A11y.
+        prep.setAttribute('aria-expanded', 'true');
+        prep.disabled = true;
+  
+        // Ensure container empty before render (idempotent)
+        paypalSlot.innerHTML = '';
+  
+        // Render
+        // eslint-disable-next-line no-undef
+        paypal.Buttons({
+          onInit: function(data, actions){
+            // keep disabled if inputs go invalid again
+            if (!checkReady()) actions.disable();
+            gh.addEventListener('input', () => checkReady() ? actions.enable() : actions.disable());
+            eula.addEventListener('change', () => checkReady() ? actions.enable() : actions.disable());
+          },
+  
+          /* 🔹 NUEVO: registrar click del botón antes de crear la orden */
+          onClick: function(data, actions) {
+            try {
+              if (window.plausible) {
+                window.plausible('paypal_button_click', {
+                  props: {
+                    repo: 'msp-checkout',
+                    gh_user: $('#gh')?.value?.trim() || 'NA'
+                  }
+                });
+              }
+            } catch (_) {}
+            return actions.resolve();
+          },
+  
+          createOrder: (data, actions) => {
+            const ghUser = gh.value.trim();
+            if (!validHandle(ghUser) || !eula.checked){
+              say('Please enter a valid GitHub username and accept the EULA.', true);
+              return;
+            }
+            return actions.order.create({
+              purchase_units: [{
+                amount: { value: '49.99' },
+                description: 'Private access to Multicloud Surveillance Platform repository',
+                custom_id: ghUser
+              }],
+              application_context: { shipping_preference: 'NO_SHIPPING' }
+            });
+          },
+  
+          /* 🔹 MODIFICADO: registrar paypal_approved tras capture() */
+          onApprove: async (data, actions) => {
+            try {
+              const details = await actions.order.capture();
+  
+              try {
+                if (window.plausible) {
+                  const pu0 = (details && details.purchase_units && details.purchase_units[0]) || {};
+                  const amt = (pu0.amount && pu0.amount.value) || 'NA';
+                  const cur = (pu0.amount && pu0.amount.currency_code) || 'USD';
+                  window.plausible('paypal_approved', {
+                    props: {
+                      amount: amt,
+                      currency: cur,
+                      repo: 'msp-checkout',
+                      gh_user: $('#gh')?.value?.trim() || 'NA'
+                    }
+                  });
+                }
+              } catch (_) {}
+  
+              // Best-effort webhook notify (mantén tu validación server-side)
+              // fetch('https://your-worker-or-lambda/webhooks/paypal', {
+              //   method:'POST', headers:{'Content-Type':'application/json'},
+              //   body: JSON.stringify({
+              //     event_type:'CHECKOUT.ORDER.APPROVED',
+              //     resource:{ id: details.id, purchase_units:[{ custom_id: $('#gh').value.trim() }] }
+              //   })
+              // }).catch(()=>{});
+  
+              window.location.href = './success.html?orderId=' + encodeURIComponent(details.id);
+            } catch (err) {
+              console.error(err);
+              say('Something went wrong with the payment. Please retry or use QR.', true);
+              window.location.href = './cancel.html';
+            }
+          },
+  
+          onCancel: () => {
+            say('Payment cancelled. You can try again or use QR.');
+            window.location.href = './cancel.html';
+          },
+  
+          onError: (err) => {
+            console.error(err);
+            say('Something went wrong with the payment. Please retry or use QR.', true);
+            window.location.href = './cancel.html';
+          },
+  
+          style: {
+            layout: 'horizontal',
+            color: 'gold',
+            shape: 'rect',
+            label: 'paypal',
+            tagline: false
+          }
+        }).render('#paypal-slot').then(() => {
+          say(''); // clear message once rendered
+          paypalSlot.scrollIntoView({behavior:'smooth', block:'center'});
+        });
+      });
+    })();
+  </script>
+
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   const prep = document.querySelector('#prep-btn');
   if (prep) {

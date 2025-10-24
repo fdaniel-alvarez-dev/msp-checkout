@@ -194,14 +194,14 @@
     }
   }
   </script>
+  
   <!-- Privacy-friendly analytics by Plausible -->
   <script async src="https://plausible.io/js/pa-2PxBChTWyzU3nHFunZmXI.js"></script>
   <script>
-    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-    plausible.init()
+    window.plausible = window.plausible || function(){ (plausible.q = plausible.q || []).push(arguments) };
+    plausible.init();
   </script>
-
-  
+  <!-- /Plausible -->
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -243,7 +243,16 @@
             <div class="inline">
               <p><a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a> · <a href="./support.html">Support</a></p>
             </div>
-          </fieldset>
+          
+            <!-- EULA / Terms consent checkbox -->
+            <div class="inline">
+              <input id="eula" class="checkbox" type="checkbox" required />
+              <label for="eula">
+                I accept the <a href="./terms.html" target="_blank" rel="noopener noreferrer">EULA/Terms</a>
+              </label>
+            </div>
+            <!-- /EULA -->
+</fieldset>
 
           <div class="inline">
             <button id="prep-btn" class="btn" type="button" aria-controls="paypal-slot" aria-expanded="false">
@@ -297,7 +306,7 @@
         document.head.appendChild(script);
       });
     }
-
+  
     // A11y helpers
     const $ = (s, el=document) => el.querySelector(s);
     const statusEl = $('#status');
@@ -305,21 +314,21 @@
       statusEl.textContent = msg || '';
       statusEl.classList.toggle('error', !!isError);
     }
-
+  
     // GitHub handle validation (HTML5 pattern + JS feedback)
     function validHandle(h) {
       return /^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/.test(h);
     }
-
+  
     (function init(){
       const gh = $('#gh');
       const eula = $('#eula');
       const prep = $('#prep-btn');
       const paypalSlot = $('#paypal-slot');
-
+  
       // Year
       $('#year').textContent = new Date().getFullYear();
-
+  
       // Re-validate on input
       function checkReady(){
         const ok = validHandle(gh.value.trim()) && eula.checked;
@@ -331,28 +340,28 @@
         eula.addEventListener(ev, checkReady);
       });
       checkReady();
-
+  
       prep.addEventListener('click', async () => {
         if (!checkReady()) {
           say('Please enter a valid GitHub username and accept the EULA.', true);
           return;
         }
         say('Loading PayPal…');
-
+  
         try{
           await loadPayPalSDK();
         }catch(e){
           say('Could not load PayPal. Please retry or use QR.', true);
           return;
         }
-
+  
         // Render PayPal Buttons (once). Disable prep button and expand region for A11y.
         prep.setAttribute('aria-expanded', 'true');
         prep.disabled = true;
-
+  
         // Ensure container empty before render (idempotent)
         paypalSlot.innerHTML = '';
-
+  
         // Render
         // eslint-disable-next-line no-undef
         paypal.Buttons({
@@ -362,6 +371,22 @@
             gh.addEventListener('input', () => checkReady() ? actions.enable() : actions.disable());
             eula.addEventListener('change', () => checkReady() ? actions.enable() : actions.disable());
           },
+  
+          /* 🔹 NUEVO: registrar click del botón antes de crear la orden */
+          onClick: function(data, actions) {
+            try {
+              if (window.plausible) {
+                window.plausible('paypal_button_click', {
+                  props: {
+                    repo: 'msp-checkout',
+                    gh_user: $('#gh')?.value?.trim() || 'NA'
+                  }
+                });
+              }
+            } catch (_) {}
+            return actions.resolve();
+          },
+  
           createOrder: (data, actions) => {
             const ghUser = gh.value.trim();
             if (!validHandle(ghUser) || !eula.checked){
@@ -377,22 +402,56 @@
               application_context: { shipping_preference: 'NO_SHIPPING' }
             });
           },
-          onApprove: (data, actions) => actions.order.capture().then((details) => {
-            // Best-effort notify your webhook endpoint, if you have one:
-            // fetch('https://your-worker-or-lambda/webhooks/paypal', {method:'POST',headers:{'Content-Type':'application/json'},
-            //   body: JSON.stringify({event_type:'CHECKOUT.ORDER.APPROVED', resource:{ id: details.id, purchase_units:[{ custom_id: $('#gh').value.trim() }] }})
-            // }).catch(()=>{});
-            window.location.href = './success.html?orderId=' + encodeURIComponent(details.id);
-          }),
+  
+          /* 🔹 MODIFICADO: registrar paypal_approved tras capture() */
+          onApprove: async (data, actions) => {
+            try {
+              const details = await actions.order.capture();
+  
+              try {
+                if (window.plausible) {
+                  const pu0 = (details && details.purchase_units && details.purchase_units[0]) || {};
+                  const amt = (pu0.amount && pu0.amount.value) || 'NA';
+                  const cur = (pu0.amount && pu0.amount.currency_code) || 'USD';
+                  window.plausible('paypal_approved', {
+                    props: {
+                      amount: amt,
+                      currency: cur,
+                      repo: 'msp-checkout',
+                      gh_user: $('#gh')?.value?.trim() || 'NA'
+                    }
+                  });
+                }
+              } catch (_) {}
+  
+              // Best-effort webhook notify (mantén tu validación server-side)
+              // fetch('https://your-worker-or-lambda/webhooks/paypal', {
+              //   method:'POST', headers:{'Content-Type':'application/json'},
+              //   body: JSON.stringify({
+              //     event_type:'CHECKOUT.ORDER.APPROVED',
+              //     resource:{ id: details.id, purchase_units:[{ custom_id: $('#gh').value.trim() }] }
+              //   })
+              // }).catch(()=>{});
+  
+              window.location.href = './success.html?orderId=' + encodeURIComponent(details.id);
+            } catch (err) {
+              console.error(err);
+              say('Something went wrong with the payment. Please retry or use QR.', true);
+              window.location.href = './cancel.html';
+            }
+          },
+  
           onCancel: () => {
             say('Payment cancelled. You can try again or use QR.');
             window.location.href = './cancel.html';
           },
+  
           onError: (err) => {
             console.error(err);
             say('Something went wrong with the payment. Please retry or use QR.', true);
             window.location.href = './cancel.html';
           },
+  
           style: {
             layout: 'horizontal',
             color: 'gold',
@@ -407,5 +466,33 @@
       });
     })();
   </script>
+<script>
+// Plausible custom events for MSP Checkout
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) Checkout start (form submit)
+  const form = document.querySelector('#buy-form');
+  if (form) {
+    form.addEventListener('submit', () => {
+      try { plausible && plausible('checkout_start', { props: { repo: 'msp-checkout' } }); } catch (_) {}
+    });
+  }
+
+  // 2) (Optional) If you configure PayPal.Buttons below, add onClick/onApprove inside your Buttons config.
+  // Example to paste INSIDE your paypal.Buttons({ ... }) options:
+  // onClick(data, actions) {
+  //   try { plausible && plausible('paypal_button_click', { props: { repo: 'msp-checkout' } }); } catch (_) {}
+  //   return actions.resolve();
+  // },
+  // onApprove: async function(data, actions) {
+  //   const details = await actions.order.capture();
+  //   try {
+  //     plausible && plausible('paypal_approved', {
+  //       props: { amount: (details?.purchase_units?.[0]?.amount?.value || 'NA') }
+  //     });
+  //   } catch (_) {}
+  //   // ... your existing logic here
+  // }
+});
+</script>
 </body>
 </html>
